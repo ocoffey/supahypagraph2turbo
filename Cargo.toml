@@ -5,3 +5,4 @@ edition = "2024"
 authors = ["Olivia Coffey", "Francisco Xavier Alves Pereira"]
 
 [dependencies]
+rustc-hash = "2.1.3"
