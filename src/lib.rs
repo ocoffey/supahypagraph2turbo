@@ -1,7 +1,6 @@
 mod structure;
 mod hyperstring;
 mod letters;
-mod indices;
 mod hyperedges;
 
 pub fn add(left: u64, right: u64) -> u64 {
