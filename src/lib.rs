@@ -2,6 +2,7 @@ mod structure;
 mod hyperstring;
 mod letters;
 mod hyperedges;
+mod jointset;
 
 pub fn add(left: u64, right: u64) -> u64 {
     left + right
