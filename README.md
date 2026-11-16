@@ -1,10 +1,13 @@
-# American English SuperHypergraph Dictionary
+# American English Adjacency Dictionary
 
-The goal of this project is to create a 2-SuperHyperGraph (of naming scheme
-n-SuperHyperGraph), which will define many relationships and comparison means
-for the US English dictionary of words.
+The goal of this project is to augment word autocomplete functionality by making
+use of information about _letter adjacency_ from a US English keyboard layout!
 
-Each word within the dictionary is a SuperhyperGraph.
+As users type letters into the keyboard, we will perform progressive lookups
+within a trie structure, while generating additional fuzzy lookups based upon
+each adjacent letter that a user types!
+
+This is a return to the originally proposed problem space.
 
 ## Initial Definitions
 
@@ -35,6 +38,12 @@ The pure definition doesn't always make easy sense. An example of a HyperEdge
 could be most forms of collection data structures! A named `Vec` is a HyperEdge,
 where each element within is contained vertex.
 
+In the case of this program, we use a `HashSet` to represent elements bounded
+by a HyperEdge. This is because a `HashSet` will non-relationally bound each
+element (each element has O(1) lookup speed, and lookups do not require relation
+to other elements within the `HashSet`), whereas a `Vec` holds some form of
+relation due to its indexed nature.
+
 ### HyperGraph
 
 A HyperGraph is a collection of HyperEdges! It can be thought of as one hierarchical
@@ -58,36 +67,28 @@ consider the `Vec` to be a hypergraph, each index as a hyperedge, and each char
 at a corresponding index would be set of elements the hyperedge bounds (in this
 case, each set would only contain 1 `char`! Which is a valid quality of hyperedges).
 
-### n-SuperHyperGraph
-
-This is the generalization of hierarchical ordering past a SuperHyperGraph.
-Akin to a k-d tree, where 'k' represents a specific number of dimensions, the 'n'
-within this definition corresponds to the amount of hierarchical SuperHyperGraphs
-that exist!
-
-The reason why our dictionary will be a 2-SuperHyperGraph is the following structure:
-
-- Each word contained within the dictionary is a SuperHyperGraph (2)
-  - Each word itself is a SuperHyperGraph (1)
-    - The mapping of letters -> joints, letter ordinals -> joints,
-      and indices -> joints are each HyperGraphs
-      - Each unordered set of these joints represents a HyperEdge
-
-If we decided to create this structure for dictionaries from other languages, then
-if would take the form of a 3-SuperHyperGraph, where the highest order SuperHyperGraph
-have entries for each language!
-
 ## Particular Course Goals
 
 ### CSC 592 - Information Retrieval
 
-Through the use of this 2-superhypergraph, we should be able to match mistyped
-words to their intended word with higher accuracy. This will make use of key
-adjacency on the keyboard!
+Through the use of this Adjacency HyperGraph, we modify word autocomplete
+functionality with slight semantic autocorrection with more information from our
+input domain.
+
+In considering adjacent letters on a US English keyboard layout, we
+widen the scope of accepted inputs for user words based on the real-world interaction
+potential of users mistakenly typing a letter with high proximity.
 
 ### CSC 546 - Algorithms for Big Data
 
 The purpose of this project within the scope of this course is in trying to be _efficient_.
-There are easy ways to represent these relations, but they contain much redundant
-information, can easily hog a lot of space, and can potentially take a lot of time
-to perform lookups.
+
+Typically, an autocomplete functionality takes a wide input space, and narrows
+its scope with each progressive step. By using adjacency hyperedges at each step,
+we are instead progressively _adding_ lookup branches at each progressive step.
+
+With this being the case, the program should still maintain reasonable limits, based
+on the fact that many hyperedge subtrees will be non-starters. As an example, a
+user entering the letter `A` generates potentials for the letters `'Q', 'W', 'S',
+'Z'`, but the letter `Z` doesn't occur often in the US English dictionary, so in
+most cases it would fail to generate a corresponding lookup.

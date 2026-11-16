@@ -28,6 +28,7 @@ impl Joint {
     /// * `letter`: a character, which represents the current letter this `Joint` will wrap
     /// * `indexinword`: the index at which this character occurs within its word
     /// * `letterordinal`: the ordinality of this letter to identical letters within the word
+    ///   * Represented by its index, or "ordinality - 1"
     ///
     /// ## Body
     ///

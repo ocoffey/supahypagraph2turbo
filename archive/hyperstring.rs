@@ -1,7 +1,8 @@
-use crate::structure::Joint;
-use std::collections::{HashSet};
 use rustc_hash::{FxHashMap, FxHashSet};
 use std::sync::Arc;
+use crate::jointset::JointSet;
+use crate::structure::Joint;
+use crate::letters::LETTERS;
 
 /// # `HyperString`
 ///
@@ -34,15 +35,18 @@ use std::sync::Arc;
 /// For `letters_to_joints`, each hyperedge represents "characters present
 /// within this word". The vertices bounded by these edges of characters are
 /// "all Joints present within this word which contain this character".
+/// A `FxHashSet` is used to hold the `Joint` values, since we don't care about their order,
+/// but instead only care about membership
 ///
 /// For `ordinals_to_joints`, each hyperedge represents "the set of ordinals
 /// from first..`last` where `last` is the largest occurrence of a character
 /// within this word". The vertices bounded by these edges of ordinals are
 /// "all Joints whose character occurs at the given ordinal within its word".
 ///
-/// > `ordinals_to_joints` is represented as a nested `Vec`, since it's less
-/// > costly to create and the conversion of ordinal -> index is trivial
-/// > (ordinal -1 = index)
+/// > `ordinals_to_joints` is represented as a nested `Vec` of `FxHashSet`, since it's less
+/// > costly to create and the conversion of ordinal -> index is trivial (ordinal -1 = index)
+/// > A `FxHashSet` is used because we don't care about the order of letters within each
+/// > ordinal level, only their membership
 ///
 /// For `indices_to_joints`, each hyperedge represents "the index at which
 /// a given `Joint` occurs within its word". Each hyperedge contains a single
@@ -50,7 +54,19 @@ use std::sync::Arc;
 ///
 pub struct HyperString {
     joints: FxHashSet<Arc<Joint>>,
-    letters_to_joints: FxHashMap<Arc<char>, Vec<Arc<Joint>>>,
+    letters_to_joints: FxHashMap<Arc<char>, FxHashSet<Arc<Joint>>>,
     indices_to_joints: Vec<Arc<Joint>>,
-    ordinals_to_joints: Vec<Vec<Arc<Joint>>>,
+    ordinals_to_joints: Vec<FxHashSet<Arc<Joint>>>,
+}
+
+impl HyperString {
+    fn new(input: String, jointset: Arc<JointSet>) -> Self {
+        let convert: FxHashSet<Arc<Joint>>
+        for letter in input {
+
+        }
+        HyperString {
+
+        }
+    }
 }
